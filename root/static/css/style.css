@@ -1,0 +1,69 @@
+body {
+ font: 1em "Laucida Console", Monaco, monospace;
+ color: #fff;
+ background-color: black;
+}
+
+#menu {
+ position: absolute;
+ top:10px;
+ left:0px;
+ width: 100%;
+ padding-bottom: 10px;
+ padding-left: 10px;
+ border-bottom: thin solid #fff;
+}
+
+#ranger {
+ position: absolute;
+ top:42px;
+ left:10px;
+}
+
+.range {
+ padding: 2px;
+ padding-left: 4px;
+ padding-right: 4px;
+ border: thin solid white;
+ color: white;
+ background-color: black;
+}
+
+.rangeSelected {
+ color: black;
+ background-color: white;
+}
+
+#problem {
+ padding-top: 40px;
+
+}
+
+.big {
+ font: 10em "Laucida Console", Monaco, monospace;
+ color: #fff;
+ text-align: right;
+ width: 50%;
+}
+
+#ans_box {
+ width: 200px;
+ border: none;
+ background-color: black;
+ color: green;
+ font: 1em "Laucida Console", Monaco, monospace;
+ text-align: right;
+ outline: none;
+}
+
+.op {
+ border: thin solid white;
+ margin: 10px;
+ text-align: center;
+ padding: 3px;
+}
+
+.opSelected {
+ color: black;
+ background-color: white;
+}
