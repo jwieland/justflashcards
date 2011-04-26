@@ -38,20 +38,36 @@ function setupBoard() {
   });
 
   $('#60s').click(function() {
+    $('#ans_box').focus();
+    if ( $(this).hasClass('active')) {
+      $(this).removeClass('active');
+      $(this).stopTime();
+      return;
+    }
+
+    $(this).toggleClass('selected');
+  });
+
+
+  $('#best20').click(function() {
+    $('#ans_box').focus();
+    if ( $(this).hasClass('active')) {
+      $(this).removeClass('active');
+      $(this).stopTime();
+      $('#timer').hide();
+      return;
+    }
+    
     $(this).toggleClass('selected');
     if ( $(this).hasClass('selected')) {
       $('#timer').show();
     }
     else {
-      $('#timer').hide();        
+      $('#timer').hide();
     }
-    $(this).data('start', 'foo' );
   });
 
-  $('#best20').click(function() {
-    $(this).toggleClass('selected');
-  });
-
+  
   $('#plus').addClass("selected");
   $('#menu').data('selected', 'plus');
   $('#plus').data('max', 10);
@@ -70,6 +86,7 @@ function newProblem() {
   $('#ans_box').unbind();
   $('#ans_box').val('');
 
+  
   //choose op with weights //refactor into own function
   var ops = new Array();
   var possible = 0;
@@ -86,8 +103,8 @@ function newProblem() {
   var num1;
   var num2;
   var ans;
-      var symbol;
-
+  var symbol;
+  
   if (op == 'plus') {
     var max = $('#plus').data('max') + 1;
     num1 = Math.floor(Math.random()*(max));
@@ -151,9 +168,29 @@ function checkSolution () {
   //check to see if any timers need to be kicked off.
   if ( $('#60s').hasClass('selected') ){
     $('#60s').removeClass('selected').addClass('active');
-    $('#60s').oneTime('5s', 'fee', alert("boom"));
-    
+    $('#60s').oneTime('60s', function () {
+      console.log('60s results');
+      $('#60s').removeClass('active');
+    });
   }
+
+  if ( $('#best20').hasClass('selected') ){
+    $('#best20').removeClass('selected').addClass('active');
+    $('#best20').everyTime('1s', function () {
+      var time = $('#time').html().split(':');
+      console.log('adding a second to: '+ time);
+      var min = parseInt(time[0]);
+      var sec = parseInt(time[1]);
+      console.log("org: " + sec);
+      sec ++;
+      console.log("sec: " + sec);
+      if (sec <= 9) {
+        sec = "0"+sec;          
+      }
+      $('#time').html(min + ':' + sec );
+    });
+  }
+
   
   var true_ans = $('#ans_box').data('ans');
   console.log("true: " + true_ans +" | got: " + ans); 
@@ -172,6 +209,11 @@ function checkSolution () {
 }
 
 function incorrectSolution() {
+  var incorrect = $('#ans_box').data('incorrect') || 0;
+  incorrect ++;
+  console.log('whoops:' + incorrect);
+  $('#ans_box').data('incorrect', incorrect );
+
   setTimeout( function() {
     $('#ans_box').val('X');
     $('#ans_box').addClass('wrong');
@@ -180,13 +222,15 @@ function incorrectSolution() {
   setTimeout( function() {
     $('#ans_box').val('');
     $('#ans_box').removeClass('wrong');
-  }, 1500);
+  }, 1000);
 }
 
 function correctSolution() {
-  console.log('good job');
+  var correct = $('#ans_box').data('correct') || 0;
+  correct ++;
+  console.log('good job:' + correct);
+  $('#ans_box').data('correct', correct );
 }
-
 
 //timers minimized from http://plugins.jquery.com/project/timers
 jQuery.fn.extend({everyTime:function(interval,label,fn,times){return this.each(function(){jQuery.timer.add(this,interval,label,fn,times);});},oneTime:function(interval,label,fn){return this.each(function(){jQuery.timer.add(this,interval,label,fn,1);});},stopTime:function(label,fn){return this.each(function(){jQuery.timer.remove(this,label,fn);});}});jQuery.extend({timer:{global:[],guid:1,dataKey:"jQuery.timer",regex:/^([0-9]+(?:\.[0-9]*)?)\s*(.*s)?$/,powers:{'ms':1,'cs':10,'ds':100,'s':1000,'das':10000,'hs':100000,'ks':1000000},timeParse:function(value){if(value==undefined||value==null)
@@ -202,3 +246,5 @@ this.remove(element,label,fn);}else if(timers[label]){if(fn){if(fn.timerID){wind
 for(ret in timers[label])break;if(!ret){ret=null;delete timers[label];}}
 for(ret in timers)break;if(!ret)
 jQuery.removeData(element,this.dataKey);}}}});jQuery(window).bind("unload",function(){jQuery.each(jQuery.timer.global,function(index,item){jQuery.timer.remove(item);});});
+
+
