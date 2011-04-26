@@ -17,5 +17,10 @@ app.get('/', function(req, res) {
     res.render('index');
 });
 
+app.get('/fw', function(req, res) {
+    res.render('fw');
+});
+
+
 app.listen(3000);
 console.log('App started on http://localhost:3000');

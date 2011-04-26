@@ -1,31 +1,44 @@
 body
 	div#content
-	div#menu 
-		span.op#plus +
-		span.op#minus -
-		span.op#times x
-		span.op#div /
-	div#ranger
-		span Range:
-		span.range#range1 1
-		span.range#range2 2
-		span.range#range3 3
-		span.range#range4 4
-		span.range#range5 5
-		span.range#range6 6
-		span.range#range7 7
-		span.range#range8 8
-		span.range#range9 9
-		span.range#range10 10
-		span.range#range11 11
-		span.range#range12 12
-		span.range#range13 13
-		span.range#range14 14
-		span.range#range15 15
-		span.range#range100 100
-		span.range#range1000 1000
-	div#problem
-		div.big#num1
-		div.big#num2
-		div.big#ans
-			input(id="ans_box", type="text", name="ans")
+		div#menu
+			span#ops
+				span.op#plus +
+				span.op#minus -
+				span.op#times x
+				span.op#div /
+			span#prefs
+				span.pref#horz horizontal
+				span.pref |
+				span.pref#60s 60s Test
+				span.pref |
+				span.pref#best20 Best 20
+		div#ranger
+			span Range:
+			span.range#range1 1
+			span.range#range2 2
+			span.range#range3 3
+			span.range#range4 4
+			span.range#range5 5
+			span.range#range6 6
+			span.range#range7 7
+			span.range#range8 8
+			span.range#range9 9
+			span.range#range10 10
+			span.range#range11 11
+			span.range#range12 12
+			span.range#range13 13
+			span.range#range14 14
+			span.range#range15 15
+			span.range#range16 16
+			span.range#range17 17
+			span.range#range18 18
+			span.range#range19 19
+			span.range#range20 20
+			span.range#range100 100
+		div#timer
+			span#time.selected 0:00
+		div#problem
+			div.big.middle#num1
+			div.big.middle#num2
+			div.middle#ans
+				input(class="big noanswer", id="ans_box", type="text", name="ans")

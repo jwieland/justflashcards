@@ -8,16 +8,28 @@ body {
  position: absolute;
  top:10px;
  left:0px;
- width: 100%;
+ right:0px;
  padding-bottom: 10px;
  padding-left: 10px;
  border-bottom: thin solid #fff;
 }
 
+#ops {
+ 
+}
+
+#prefs {
+ padding-left: 200px;
+}
+
+.pref {
+ padding-right: 5px;
+ padding-left: 5px;
+}
+
 #ranger {
  position: absolute;
  top:42px;
- left:10px;
 }
 
 .range {
@@ -29,9 +41,16 @@ body {
  background-color: black;
 }
 
-.rangeSelected {
- color: black;
- background-color: white;
+#timer {
+ position: absolute;
+ right: 10px;
+ top:40px;
+ width: 100px;
+ text-align: right;
+}
+
+#time {
+ font-size: 2em;
 }
 
 #problem {
@@ -40,20 +59,39 @@ body {
 }
 
 .big {
+ width: 200px;
  font: 10em "Laucida Console", Monaco, monospace;
  color: #fff;
+}
+
+.middle {
  text-align: right;
  width: 50%;
 }
 
+.outline {
+ border: solid thin green;
+}
+
+#ans {
+ border-top: 1px solid white;
+}
+
 #ans_box {
  width: 200px;
- border: none;
  background-color: black;
- color: green;
- font: 1em "Laucida Console", Monaco, monospace;
  text-align: right;
  outline: none;
+}
+
+.noanswer {
+ color: green;
+ border: none;
+}
+
+.wrong {
+ color: red;
+ border: 5px solid red;
 }
 
 .op {
@@ -63,7 +101,16 @@ body {
  padding: 3px;
 }
 
-.opSelected {
+.selected {
  color: black;
  background-color: white;
+}
+
+.active {
+ color: black;
+ background-color: green;
+}
+
+#fw {
+  border: thin solid red;
 }
