@@ -4,6 +4,8 @@ $(document).ready(function() {
 });
 
 function setupBoard() {
+
+  //clicks event handler
   $('.op').click(function() {
     $(this).toggleClass('selected');
 
@@ -36,9 +38,16 @@ function setupBoard() {
     //	$('#ranger').hide();
     newProblem();
   });
-
+  
   $('#60s').click(function() {
     $('#ans_box').focus();
+
+    if ( $(this).hasClass('disable')) {
+        return;
+    }
+
+    $('#best20').toggleClass('disable');
+    
     if ( $(this).hasClass('active')) {
       $(this).removeClass('active');
       $(this).stopTime();
@@ -51,13 +60,20 @@ function setupBoard() {
 
   $('#best20').click(function() {
     $('#ans_box').focus();
+
+    if ( $(this).hasClass('disable')) {
+        return;
+    }
+
+    $('#60s').toggleClass('disable');
+    
     if ( $(this).hasClass('active')) {
       $(this).removeClass('active');
       $(this).stopTime();
       $('#timer').hide();
       return;
     }
-    
+
     $(this).toggleClass('selected');
     if ( $(this).hasClass('selected')) {
       $('#timer').show();
@@ -67,7 +83,12 @@ function setupBoard() {
     }
   });
 
-  
+  $('#save').click(function() {
+    
+
+  });
+
+  //intial setup
   $('#plus').addClass("selected");
   $('#menu').data('selected', 'plus');
   $('#plus').data('max', 10);
@@ -176,17 +197,24 @@ function checkSolution () {
 
   if ( $('#best20').hasClass('selected') ){
     $('#best20').removeClass('selected').addClass('active');
+    $('#best20').data('elapsed', 0);
     $('#best20').everyTime('1s', function () {
-      var time = $('#time').html().split(':');
-      console.log('adding a second to: '+ time);
-      var min = parseInt(time[0]);
-      var sec = parseInt(time[1]);
-      console.log("org: " + sec);
-      sec ++;
-      console.log("sec: " + sec);
-      if (sec <= 9) {
-        sec = "0"+sec;          
+      var elapsed = $('#best20').data('elapsed');
+      elapsed ++;
+
+      var min = 0;
+      var sec = elapsed;
+
+      while (sec >= 60) {
+        min ++;
+        sec = sec - 60;
       }
+      
+      if (sec <= 9) {
+          sec = '0' + sec;
+      }
+
+      $('#best20').data('elapsed', elapsed);
       $('#time').html(min + ':' + sec );
     });
   }
@@ -206,12 +234,18 @@ function checkSolution () {
       $('#ans_box').removeClass('wrong');
     }
   }
+
+  updateDisplay();
+  
+}
+
+function updateDisplay() {
+  $('#correct_num').html( $('#ans_box').data('correct') );
 }
 
 function incorrectSolution() {
   var incorrect = $('#ans_box').data('incorrect') || 0;
   incorrect ++;
-  console.log('whoops:' + incorrect);
   $('#ans_box').data('incorrect', incorrect );
 
   setTimeout( function() {
@@ -228,7 +262,6 @@ function incorrectSolution() {
 function correctSolution() {
   var correct = $('#ans_box').data('correct') || 0;
   correct ++;
-  console.log('good job:' + correct);
   $('#ans_box').data('correct', correct );
 }
 

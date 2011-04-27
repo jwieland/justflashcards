@@ -27,6 +27,18 @@ body {
  padding-left: 5px;
 }
 
+#results {
+ padding-left: 100px;
+}
+
+#correct_num {
+ padding-left: 3px;
+}
+
+#save {
+ padding-left: 10px;
+}
+
 #ranger {
  position: absolute;
  top:42px;
@@ -109,6 +121,11 @@ body {
 .active {
  color: black;
  background-color: green;
+}
+
+.disable {
+ color: gray;
+ background-color: black;
 }
 
 #fw {

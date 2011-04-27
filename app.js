@@ -4,6 +4,7 @@
  */
 
 var express = require('express');
+// https://github.com/brainfucker/hashlib
 
 var app = module.exports = express.createServer();
 
