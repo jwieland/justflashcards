@@ -1,24 +1,24 @@
 Just Flash Cards
 http://www.monkeylearns.com
 
-I built this app because every flash card was a heavy java app.  I have three boys and they are using this to help strengthen there math skills
+I built this app because of a lack of simple web based math flashcards.  Most of the math based flashcards are heavy java applet.  My kids do 50 problems a day and I thought orsthers might like it as well.
 
-All the business logic is pure js so does not require browser reloads.  Making it is fast and fluid.  There is server component which will save progress and integrate in a facebook account.  However not required.  
+All the business logic is done pure clientside js.  So the app feels fast and fluid.  There is server component which will save progress and integrate in a facebook, however it is not required.  
 
-At this point all the logic is there to do the 4 basic math operations (add, subtract, multiply, divide).  The official resting point of the app will be at http://www.monkeylearns.com however the code is licenced GPL so feel free to do with what you want.
+The logic engine covers  basic math operations (add, subtract, multiply, divide).  The code is licenced GPL so feel free to do with what you want.
 
 
 Features
 -----
 * Basic math operations (+,-,*,%)
 * Freeform play.  Choose your skill level
-* 60 seconds quiz
-* Facebook Integeration
-
+* 30 seconds quiz
+* Best time to answer 10 
 
 Vision
 -----
-* Add reward feedback for getting an answer right.  I've been hacking on some fireworks code.  But nothing is there yet.  It would be great to have dozens of different types of rewards
+* Facebook Integeration
+* Add reward feedback for getting correct answers.  I've been hacking on some fireworks code.  But nothing is there yet.  It would be great to have dozens of different types of rewards
 * Idea of levels to track progress
 * Daily reporting email showing use/scores/progress
 * Identify particular problems sets that are issues and tailor the program to re-enforce those
@@ -27,4 +27,4 @@ Vision
 * Build out a multi user competetions
 
 
-Patchs welcome.  
+Patches welcome.  
