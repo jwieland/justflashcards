@@ -1,1 +1,30 @@
 Just Flash Cards
+http://www.monkeylearns.com
+
+I built this app because every flash card was a heavy java app.  I have three boys and they are using this to help strengthen there math skills
+
+All the business logic is pure js so does not require browser reloads.  Making it is fast and fluid.  There is server component which will save progress and integrate in a facebook account.  However not required.  
+
+At this point all the logic is there to do the 4 basic math operations (add, subtract, multiply, divide).  The official resting point of the app will be at http://www.monkeylearns.com however the code is licenced GPL so feel free to do with what you want.
+
+
+Features
+-----
+* Basic math operations (+,-,*,%)
+* Freeform play.  Choose your skill level
+* 60 seconds quiz
+* Facebook Integeration
+
+
+Vision
+-----
+* Add reward feedback for getting an answer right.  I've been hacking on some fireworks code.  But nothing is there yet.  It would be great to have dozens of different types of rewards
+* Idea of levels to track progress
+* Daily reporting email showing use/scores/progress
+* Identify particular problems sets that are issues and tailor the program to re-enforce those
+* Built in a "help" section that will graphically/animate show the solution to a problem
+* Extend the operations to include coins, time, square, square roots, geometry 
+* Build out a multi user competetions
+
+
+Patchs welcome.  

@@ -7,9 +7,9 @@ body
 				span.op#times x
 				span.op#div /
 			span#prefs
-				span.pref#60s 60s Test
+				span.pref#30s 30s Test
 				span.pref |
-				span.pref#best20 Best 20
+				span.pref#best10 Best 10
 			span#results
 				span.result#correct &hearts;
 				span.result#correct_num 0
@@ -43,4 +43,4 @@ body
 			div.big.middle#num1
 			div.big.middle#num2
 			div.middle#ans
-				input(class="big noanswer", id="ans_box", type="text", name="ans")
+				input(class="big noanswer", id="ans_box", type="text", pattern="[0-9]", name="ans")

@@ -3,29 +3,57 @@ $(document).ready(function() {
 //    setupFWBoard();
 });
 
+/*
+ * .op: mathematical operations on top left (+, -, x, /)
+ * #ranger: Container that displays the range elements
+ * .range: Range elements
+ * 
+ * 
+ */
+
 function setupBoard() {
 
   //clicks event handler
   $('.op').click(function() {
-    $(this).toggleClass('selected');
 
+//    console.log('Op is clicked');
     if ( $(this).hasClass('selected')) {
+//      console.log('Op is selected');
+      if ( $('#ranger').css('display') === 'block') {
+        $(this).toggleClass('selected');
+        $('#ranger').hide();
+      }
+      else {
+          
+        $('#menu').data('selected', $(this).attr("id"));
+        $('#ranger').show("fast");
+
+        //clear the range options and set for this operation
+        $('.range').removeClass('selected');
+        var max = $(this).data('max');
+        for (var i = 1; i <= max; i++) {
+	  $('#range'+i).addClass('selected');
+        }
+      }
+    }
+    else {
+      $(this).toggleClass('selected');
+      
       $('#menu').data('selected', $(this).attr("id"));
-      $('#ranger').show();
+      $('#ranger').show("fast");
+
+      //clear the range options and set for this operation
       $('.range').removeClass('selected');
       var max = $(this).data('max');
       for (var i = 1; i <= max; i++) {
 	$('#range'+i).addClass('selected');
       }
     }
-    else {
-      $('#ranger').hide();		 
-    }
     
   });
 
   $('.range').click(function() {
-    console.log("range selected");
+//    console.log("range selected");
     var range = $(this).attr('id');
     var max = parseInt(range.replace("range",""));
     $('.range').removeClass("selected");
@@ -33,39 +61,20 @@ function setupBoard() {
       $('#range'+i).addClass("selected");
     }
     var selected = $('#menu').data('selected');
-    console.log('setting #' + selected + ': max ' + max); 
+//    console.log('setting #' + selected + ': max ' + max); 
     $('#' + selected).data('max', max);
     //	$('#ranger').hide();
     newProblem();
   });
   
-  $('#60s').click(function() {
+  $('#30s').click(function() {
     $('#ans_box').focus();
 
     if ( $(this).hasClass('disable')) {
         return;
     }
 
-    $('#best20').toggleClass('disable');
-    
-    if ( $(this).hasClass('active')) {
-      $(this).removeClass('active');
-      $(this).stopTime();
-      return;
-    }
-
-    $(this).toggleClass('selected');
-  });
-
-
-  $('#best20').click(function() {
-    $('#ans_box').focus();
-
-    if ( $(this).hasClass('disable')) {
-        return;
-    }
-
-    $('#60s').toggleClass('disable');
+    $('#best10').toggleClass('disable');
     
     if ( $(this).hasClass('active')) {
       $(this).removeClass('active');
@@ -76,6 +85,44 @@ function setupBoard() {
 
     $(this).toggleClass('selected');
     if ( $(this).hasClass('selected')) {
+      $(this).data('correct', 0);
+      if ($('#time').hasClass('active')) {
+          $('#time').addClass('selected').removeClass('active');
+      }
+      $('#time').html( 30 );
+      $('#timer').show();
+    }
+    else {
+      $('#timer').hide();
+    }
+
+  });
+
+
+  $('#best10').click(function() {
+    $('#ans_box').focus();
+
+    if ( $(this).hasClass('disable')) {
+        return;
+    }
+
+    $('#30s').toggleClass('disable');
+    
+    if ( $(this).hasClass('active')) {
+      $(this).removeClass('active');
+      $(this).stopTime();
+      $('#timer').hide();
+      return;
+    }
+
+    $(this).toggleClass('selected');
+    if ( $(this).hasClass('selected')) {
+      $(this).data('correct', 0);
+      if ($('#time').hasClass('active')) {
+          $('#time').addClass('selected').removeClass('active');
+      }
+      $('#time').html( "0:00" );
+
       $('#timer').show();
     }
     else {
@@ -83,10 +130,19 @@ function setupBoard() {
     }
   });
 
+
+  //ans_box should ALWAYS have focus
+  setInterval(function() { 
+    $('#ans_box').focus();
+  }, 1000);
+
+
   $('#save').click(function() {
     
 
   });
+
+
 
   //intial setup
   $('#plus').addClass("selected");
@@ -97,6 +153,9 @@ function setupBoard() {
   for (var i = 1; i <= 10; i++) {
     $('#range'+i).addClass("selected");
   }
+
+  getState();
+  updateDisplay();
 
   newProblem();
 }
@@ -116,9 +175,9 @@ function newProblem() {
 	possible++;
       });
 
-  console.log('Available ops: ' + ops);
+//  console.log('Available ops: ' + ops);
   var op = ops[Math.floor(Math.random()*(possible))];
-  console.log("op:" + op);
+//  console.log("op:" + op);
 
   //rand 1-10
   var num1;
@@ -130,7 +189,7 @@ function newProblem() {
     var max = $('#plus').data('max') + 1;
     num1 = Math.floor(Math.random()*(max));
     num2 = Math.floor(Math.random()*(max));
-    console.log('plus op - max: ' + max + ' num1: ' + num1 + ' num2: ' + num2);
+//    console.log('plus op - max: ' + max + ' num1: ' + num1 + ' num2: ' + num2);
     symbol = '+';
     ans = num1 + num2;
   }
@@ -174,6 +233,11 @@ function newProblem() {
   $('#num2').html(symbol + num2);
 
   $('#ans_box').keyup(function() {
+    if ( $('#ans_box').hasClass('wrong')) {
+      $('#ans_box').removeClass('wrong');
+      var answer = $('#ans_box').val().replace("X", "");
+      $('#ans_box').val(answer);
+    }
     checkSolution();
   });
 
@@ -187,21 +251,39 @@ function checkSolution () {
   var num2 = parseInt($('#num2').html());
 
   //check to see if any timers need to be kicked off.
-  if ( $('#60s').hasClass('selected') ){
-    $('#60s').removeClass('selected').addClass('active');
-    $('#60s').oneTime('60s', function () {
-      console.log('60s results');
-      $('#60s').removeClass('active');
+  if ( $('#30s').hasClass('selected') ){
+    $('#30s').removeClass('selected').addClass('active');
+    $('#30s').data('elapsed', 0);
+    $('#30s').everyTime('1s', function () {
+      var elapsed = $('#30s').data('elapsed');
+      elapsed ++;
+      $('#30s').data('elapsed', elapsed);
+
+      if (elapsed == 30) {
+        $('#best10').removeClass('disable');
+        $('#30s').removeClass('active');
+        $('#30s').stopTime();
+        $('#time').removeClass('selected').addClass('active');
+        $('#time').html($('#30s').data('correct') );
+      }
+      else {
+        var sec = 30 - elapsed;
+        if (sec <= 9) {
+          sec = '0' + sec;
+        }
+        $('#time').html( sec );
+      }
     });
+
+
   }
 
-  if ( $('#best20').hasClass('selected') ){
-    $('#best20').removeClass('selected').addClass('active');
-    $('#best20').data('elapsed', 0);
-    $('#best20').everyTime('1s', function () {
-      var elapsed = $('#best20').data('elapsed');
+  if ( $('#best10').hasClass('selected') ){
+    $('#best10').removeClass('selected').addClass('active');
+    $('#best10').data('elapsed', 0);
+    $('#best10').everyTime('1s', function () {
+      var elapsed = $('#best10').data('elapsed');
       elapsed ++;
-
       var min = 0;
       var sec = elapsed;
 
@@ -214,17 +296,25 @@ function checkSolution () {
           sec = '0' + sec;
       }
 
-      $('#best20').data('elapsed', elapsed);
+      $('#best10').data('elapsed', elapsed);
       $('#time').html(min + ':' + sec );
     });
   }
 
   
   var true_ans = $('#ans_box').data('ans');
-  console.log("true: " + true_ans +" | got: " + ans); 
+//  console.log("true: " + true_ans +" | got: " + ans); 
   if (ans == true_ans) {
     correctSolution();
-    newProblem();
+
+    if ($('#30s').hasClass('active') || $('#best10').hasClass('active') ){
+      newProblem();        
+    }
+    else {
+      setTimeout(function() {
+        newProblem();
+      }, 300);
+    }
   }
   else {
     if (String(ans).length === String(true_ans).length ) {
@@ -241,6 +331,7 @@ function checkSolution () {
 
 function updateDisplay() {
   $('#correct_num').html( $('#ans_box').data('correct') );
+  saveState();
 }
 
 function incorrectSolution() {
@@ -254,8 +345,12 @@ function incorrectSolution() {
   }, 250);
 
   setTimeout( function() {
-    $('#ans_box').val('');
-    $('#ans_box').removeClass('wrong');
+    //could have been removed by a quick re-entry
+    if ( $('#ans_box').hasClass('wrong')) {
+      $('#ans_box').removeClass('wrong');
+      $('#ans_box').val('');
+    }
+
   }, 1000);
 }
 
@@ -263,7 +358,62 @@ function correctSolution() {
   var correct = $('#ans_box').data('correct') || 0;
   correct ++;
   $('#ans_box').data('correct', correct );
+
+  if ( $('#30s').hasClass('active') ){
+    var val = $('#30s').data('correct');
+    val ++;
+    $('#30s').data('correct', val);
+  }
+  else if ( $('#best10').hasClass('active') ){
+    var val = $('#best10').data('correct');
+    val ++;
+    $('#best10').data('correct', val);
+    if (val >= 10) {
+      $('#30s').removeClass('disable');
+      $('#best10').removeClass('active');
+      $('#best10').stopTime();
+      $('#time').removeClass('selected').addClass('active');
+    }
+  }
 }
+
+
+function saveState() {
+
+  //gather data
+  var incorrect = $('#ans_box').data('incorrect');
+  var correct = $('#ans_box').data('correct');
+
+  var data = {
+    "incorrect": incorrect,
+    "correct": correct
+  }
+
+  var date = new Date();
+  date.setTime(date.getTime() + (365*24*60*60*1000));
+  var expires = "; expires="+date.toGMTString();
+
+//  console.log("data saved:"+ JSON.stringify(data));
+  document.cookie = 'SFC='+JSON.stringify(data)+expires+'; path=/';
+}
+
+function getState() {
+  var cookies = document.cookie.split(';');
+  for (var i=0; i < cookies.length; i++) {
+    var cookie = cookies[i];
+    while (cookie.charAt(0)==' ') cookie = cookie.substring(1, cookie.length);
+    if (cookie.indexOf('SFC=') == 0) {
+      var data = jQuery.parseJSON(cookie.substring(4,cookie.length));
+//      console.log("cookie data: " + data);
+
+      $('#ans_box').data('incorrect', data.incorrect);
+      $('#ans_box').data('correct', data.correct);
+
+    }
+  }
+}
+
+
 
 //timers minimized from http://plugins.jquery.com/project/timers
 jQuery.fn.extend({everyTime:function(interval,label,fn,times){return this.each(function(){jQuery.timer.add(this,interval,label,fn,times);});},oneTime:function(interval,label,fn){return this.each(function(){jQuery.timer.add(this,interval,label,fn,1);});},stopTime:function(label,fn){return this.each(function(){jQuery.timer.remove(this,label,fn);});}});jQuery.extend({timer:{global:[],guid:1,dataKey:"jQuery.timer",regex:/^([0-9]+(?:\.[0-9]*)?)\s*(.*s)?$/,powers:{'ms':1,'cs':10,'ds':100,'s':1000,'das':10000,'hs':100000,'ks':1000000},timeParse:function(value){if(value==undefined||value==null)
