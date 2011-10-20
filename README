@@ -1,1 +1,41 @@
 Just Flash Cards
+http://www.monkeylearns.com
+
+I built this app because I could not find a simple webbased math flashcards. My kids do 50 problems a day and I thought orsthers might like it as well.
+
+All the business logic is done pure clientside js.  So the app feels fast and fluid.  There is server component which will save progress and integrate in a facebook, however it is not required.  
+
+The logic engine covers  basic math operations (add, subtract, multiply, divide).  The code is licenced GPL so feel free to do with what you want.
+
+Features
+-----
+* Basic math operations (+,-,*,%)
+* Freeform play.  Choose your skill level
+* 30 seconds quiz
+* Best time to answer 10 
+
+Vision
+-----
+* Facebook Integeration
+* Add reward feedback for getting correct answers.  I've been hacking on some fireworks code.  But nothing is there yet.  It would be great to have dozens of different types of rewards
+* Idea of levels to track progress
+* Daily reporting email showing use/scores/progress
+* Identify particular problems sets that are issues and tailor the program to re-enforce those
+* Built in a "help" section that will graphically/animate show the solution to a problem
+* Extend the operations to include coins, time, square, square roots, geometry 
+* Build out a multi user competetions
+
+
+Patches welcome.  
+
+Run the server yourself
+-----------------------
+You probably only should only do this if you are experienced with linux, nodejs, and github. If you 
+just want to use the flashcard app just go to http://www.monkeylearns.com
+
+Install node and npm.  Follow instructions here: https://github.com/joyent/node/wiki/Installation
+Download the flashcard code:  git clone https://github.com/jwieland/justflashcards.git
+> cd justflashcards
+> node app.js
+
+Then go to your browser and connect http://localhost:3001/
