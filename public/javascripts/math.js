@@ -7,36 +7,64 @@ function setupBoard() {
 
   //clicks event handler
   $('.op').click(function() {
-    $(this).toggleClass('selected');
-
-    if ( $(this).hasClass('selected')) {
-      $('#menu').data('selected', $(this).attr("id"));
-      $('#ranger').show();
-      $('.range').removeClass('selected');
-      var max = $(this).data('max');
-      for (var i = 1; i <= max; i++) {
-	$('#range'+i).addClass('selected');
+      if (! $(this).hasClass('selected')) {
+	  $(this).addClass('selected');
       }
-    }
-    else {
-      $('#ranger').hide();		 
-    }
-    
+      $('#menu').data('selected', $(this).attr("id"));
+
+      $('#ranger').show();
+      $('#range_control').data('selected', 'max');
+      $('.range_control').removeClass('selected');
+      $('#max').addClass('selected');
+
+      resetRanger( this.id )
+  });
+
+  $('#min').click(function() {
+      $('#range_control').data('selected', $(this).attr("id"));
+      var op_selected = $('#menu').data('selected');
+      $('.range_control').removeClass('selected');
+      $(this).addClass('selected');
+
+  });
+
+  $('#max').click(function() {
+      $('#range_control').data('selected', $(this).attr("id"));
+      var op_selected = $('#menu').data('selected');
+      $('.range_control').removeClass('selected');
+      $(this).addClass('selected');
+
+  });
+
+  $('#limit').click(function() {
+      $('#range_control').data('selected', $(this).attr("id"));
+      var op_selected = $('#menu').data('selected');
+      $('.range_control').removeClass('selected');
+      $(this).addClass('selected');
+
+  });
+
+  $('#clear').click(function() {
+      var op_selected = $('#menu').data('selected');
+
+      $('#' + op_selected).removeClass('selected');
+      $('#ranger').hide();
   });
 
   $('.range').click(function() {
-    console.log("range selected");
+    //console.log("range selected");
     var range = $(this).attr('id');
-    var max = parseInt(range.replace("range",""));
-    $('.range').removeClass("selected");
-    for (var i = 1; i <= max; i++) {
-      $('#range'+i).addClass("selected");
-    }
-    var selected = $('#menu').data('selected');
-    console.log('setting #' + selected + ': max ' + max); 
-    $('#' + selected).data('max', max);
+    var value = parseInt(range.replace("range","")); //each css id has its number in it
+    
+    var op_selected = $('#menu').data('selected');
+    var range_selected = $('#range_control').data('selected');
+     // console.log('setting #' + op_selected + ':  ' + range_selected +' to ' + value ); 
+    $('#' + op_selected).data(range_selected, value);
+
+    resetRanger( op_selected )
+
     //	$('#ranger').hide();
-    newProblem();
+    //newProblem();
   });
   
   $('#60s').click(function() {
@@ -88,19 +116,53 @@ function setupBoard() {
 
   });
 
+  $('#reset').click(function() {
+      $('#ans_box').data('correct', 0 );
+      updateDisplay();
+  });
+
   //intial setup
   $('#plus').addClass("selected");
   $('#menu').data('selected', 'plus');
   $('#plus').data('max', 10);
+  $('#plus').data('min', 1);
+  $('#plus').data('limit', 12);
   $('#wrong').hide();
   $('#timer').hide();
   for (var i = 1; i <= 10; i++) {
     $('#range'+i).addClass("selected");
   }
 
+  setInterval( function () {   $('#ans_box').focus();  }, 1000);
   newProblem();
 }
 
+function resetRanger( id ) {
+
+//    console.log("id:"+ id);
+
+    $('.range').removeClass('selected');  //clear what is there and repopulate
+    var max = $('#' + id).data('max');
+    var min = $('#' + id).data('min');
+
+    if (! min) {
+	$('#' + id).data('min', 1);
+	min = $('#' + id).data('min');
+    }
+    var limit = $('#' + id).data('limit');
+    if (! limit) {
+	$('#' + id).data('limit', 12);
+        limit = $('#' + id).data('limit');
+    }
+    $('.range').removeClass('selectedLimit');
+    $('#range'+limit).addClass('selectedLimit');    
+
+    if (max) {
+	for (var i = min; i <= max; i++) {
+	    $('#range'+i).addClass('selected');
+	}
+    }
+}
 
 function newProblem() {
   $('#ranger').hide();
@@ -116,9 +178,15 @@ function newProblem() {
 	possible++;
       });
 
-  console.log('Available ops: ' + ops);
+  //console.log('Available ops: ' + ops);
   var op = ops[Math.floor(Math.random()*(possible))];
-  console.log("op:" + op);
+  //console.log("op:" + op);
+    if (!op) {
+	op = 'plus';
+	$('#plus').data('max', 1);
+	$('#plus').data('min', 1);
+	$('#plus').data('limit', 0);
+    }
 
   //rand 1-10
   var num1;
@@ -127,17 +195,25 @@ function newProblem() {
   var symbol;
   
   if (op == 'plus') {
-    var max = $('#plus').data('max') + 1;
-    num1 = Math.floor(Math.random()*(max));
-    num2 = Math.floor(Math.random()*(max));
-    console.log('plus op - max: ' + max + ' num1: ' + num1 + ' num2: ' + num2);
+    var max = $('#plus').data('max');
+    var min = $('#plus').data('min');
+    var limit = $('#plus').data('limit') + 1;
+    num1 = Math.floor(Math.random()*(max - min));
+    num1 = num1 + min;
+    num2 = Math.floor(Math.random()*(limit));
+    //console.log('plus op - max: ' + max + ' num1: ' + num1 + ' num2: ' + num2);
     symbol = '+';
     ans = num1 + num2;
   }
   else if (op == 'minus') {
-    var max = $('#minus').data('max') + 1; 
-    num1 = Math.floor(Math.random()*max);
-    num2 = Math.floor(Math.random()*max);
+    var max = $('#minus').data('max');
+    var min = $('#minus').data('min');
+    var limit = $('#minus').data('limit') + 1;
+ 
+    num1 = Math.floor(Math.random()*(max - min));
+    num1 = num1 + min;
+
+    num2 = Math.floor(Math.random()*limit);
 
     if (num1 < num2) {
       var num2_h = num2;
@@ -149,17 +225,24 @@ function newProblem() {
     ans = num1 - num2;
   }
   else if (op == 'times') {
-    var max = $('#times').data('max') + 1; 
-    num1 = Math.floor(Math.random()*max);
-    num2 = Math.floor(Math.random()*max);
+    var max = $('#times').data('max');
+    var min = $('#times').data('min');
+    var limit = $('#times').data('limit') + 1;
+    num1 = Math.floor(Math.random()*(max - min));
+    num1 = num1 + min;
+    num2 = Math.floor(Math.random()*(limit));
 
     symbol = 'x';
     ans = num1 * num2;
   }
   else {
-    var max = $('#div').data('max'); 
-    num1 = Math.floor(Math.random()*max)+1;
-    num2 = Math.floor(Math.random()*max)+1;
+    var max = $('#div').data('max');
+    var min = $('#div').data('min');
+    var limit = $('#div').data('limit');
+    num1 = Math.floor(Math.random()*(max - min));
+    num1 = num1 + min;
+    num2 = Math.floor(Math.random()*(limit));
+    num2 = num2 + 1;
 
     ans = num1;
     num1 = num1 * num2;
@@ -190,7 +273,7 @@ function checkSolution () {
   if ( $('#60s').hasClass('selected') ){
     $('#60s').removeClass('selected').addClass('active');
     $('#60s').oneTime('60s', function () {
-      console.log('60s results');
+      //console.log('60s results');
       $('#60s').removeClass('active');
     });
   }
@@ -221,7 +304,7 @@ function checkSolution () {
 
   
   var true_ans = $('#ans_box').data('ans');
-  console.log("true: " + true_ans +" | got: " + ans); 
+  //console.log("true: " + true_ans +" | got: " + ans); 
   if (ans == true_ans) {
     correctSolution();
     newProblem();
