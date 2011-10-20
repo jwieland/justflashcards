@@ -160,7 +160,7 @@ function setupBoard() {
   $('#menu').data('selected', 'plus');
   $('#plus').data('max', 10);
   $('#plus').data('min', 1);
-  $('#plus').data('limit', 12);
+  $('#plus').data('limit', 10);
   $('#wrong').hide();
   $('#timer').hide();
   for (var i = 1; i <= 10; i++) {
@@ -190,7 +190,7 @@ function resetRanger( id ) {
     }
     var limit = $('#' + id).data('limit');
     if (! limit) {
-	$('#' + id).data('limit', 12);
+	$('#' + id).data('limit', 10);
         limit = $('#' + id).data('limit');
     }
     $('.range').removeClass('selectedLimit');
@@ -213,8 +213,13 @@ function newProblem() {
   var ops = new Array();
   var possible = 0;
       $('.op.selected').each(function(cnt) {
-	ops.push($(this).attr('id'));
-	possible++;
+          if ( $(this).data('max') ) {
+	      ops.push($(this).attr('id'));
+	      possible++;
+	  }
+	  else {
+	      $(this).removeClass("selected");
+	  }
       });
 
   //console.log('Available ops: ' + ops);
