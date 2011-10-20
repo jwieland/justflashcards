@@ -4,8 +4,6 @@
  */
 
 var express = require('express');
-// https://github.com/brainfucker/hashlib
-
 var app = module.exports = express.createServer();
 
 // Configuration
@@ -21,11 +19,13 @@ app.configure(function(){
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  app.set('port', '3001');
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler()); 
+  app.use(express.errorHandler());
+  app.set('port', '3000'); 
 });
 
 // Routes
@@ -42,6 +42,6 @@ app.get('/fw', function(req, res) {
 // Only listen on $ node app.js
 
 if (!module.parent) {
-  app.listen(3000);
+  app.listen( app.set('port'));
   console.log("Express server listening on port %d", app.address().port);
 }

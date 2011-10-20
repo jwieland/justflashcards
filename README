@@ -39,3 +39,7 @@ Download the flashcard code:  git clone https://github.com/jwieland/justflashcar
 > node app.js
 
 Then go to your browser and connect http://localhost:3001/
+
+License
+------
+GPLv3 http://www.gnu.org/licenses/gpl.html
