@@ -7,13 +7,14 @@ body
 				span.op#times x
 				span.op#div /
 			span#prefs
-				span.pref#30s 30s Test
-				span.pref |
-				span.pref#best10 Best 10
+				//span.pref#60s 60s Test
+				//span.pref |
+				//span.pref#best20 Best 20
 			span#results
 				span.result#correct &hearts;
 				span.result#correct_num 0
-				span.result#save Save
+				//span.result#save Save
+				span.result#reset Reset
 		div#ranger
 			span Range:
 			span.range#range1 1
@@ -36,7 +37,11 @@ body
 			span.range#range18 18
 			span.range#range19 19
 			span.range#range20 20
-			span.range#range100 100
+			span#range_control
+				span.range_control#min Min
+				span.range_control#max Max
+				span.range_control#limit Limit
+				span.range_control#clear Clear
 		div#timer
 			span#time.selected 0:00
 		div#problem

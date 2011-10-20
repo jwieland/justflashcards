@@ -39,6 +39,10 @@ body {
  padding-left: 10px;
 }
 
+#reset {
+ padding-left: 10px;
+}
+
 #ranger {
  position: absolute;
  top:42px;
@@ -53,6 +57,20 @@ body {
  background-color: black;
 }
 
+#range_control {
+    padding-left: 100px;
+}
+
+.range_control {
+    padding: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+    border: thin solid white;
+    color: white;
+    background-color: black;
+}
+
+
 #timer {
  position: absolute;
  right: 10px;
@@ -66,13 +84,14 @@ body {
 }
 
 #problem {
- padding-top: 40px;
+ padding-top: 60px;
 
 }
 
 .big {
  width: 200px;
- font: 10em "Laucida Console", Monaco, monospace;
+ font: 8em "Laucida Console", Monaco, monospace;
+ line-height: 1.1em;
  color: #fff;
 }
 
@@ -116,6 +135,11 @@ body {
 .selected {
  color: black;
  background-color: white;
+}
+
+.selectedLimit {
+ color: black;
+ background-color: darkgreen;
 }
 
 .active {
